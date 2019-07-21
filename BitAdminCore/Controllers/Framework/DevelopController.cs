@@ -335,7 +335,7 @@ namespace BitAdminCore.Controllers
                     model = new SysOperation();
                     this.ToModel(model);
                     model.Id = Guid.NewGuid();
-                    model.CreateBy = Convert.ToString(SSOClient.UserId);
+                    model.CreateBy = SSOClient.UserId;//Convert.ToString(SSOClient.UserId);
                     model.CreateTime = DateTime.Now;
                     model.OrderNo = SqlHelper.GetMaxID("OrderNo", "SysOperation");
                     dbContext.Set<SysOperation>().Add(model);

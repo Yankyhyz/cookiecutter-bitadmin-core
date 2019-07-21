@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BitAdminCore.Models
@@ -17,6 +17,7 @@ namespace BitAdminCore.Models
         public string Gender { get; set; }
         public DateTime? Birthday { get; set; }
         public string ExtendId { get; set; }
+        public string UserImage { get; set; }
         public string UserStatus { get; set; }
         public int? OrderNo { get; set; }
         public Guid? CreateBy { get; set; }

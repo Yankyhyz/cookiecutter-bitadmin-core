@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using BitAdminCore.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -16,6 +16,7 @@ namespace BitAdminCore.Models
         {
         }
 
+        public virtual DbSet<DemoOne> DemoOne { get; set; }
         public virtual DbSet<FlowBills> FlowBills { get; set; }
         public virtual DbSet<FlowBillsRecord> FlowBillsRecord { get; set; }
         public virtual DbSet<FlowBillsRecordUser> FlowBillsRecordUser { get; set; }
@@ -46,12 +47,32 @@ namespace BitAdminCore.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(SqlHelper.ConnectionString);
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                // optionsBuilder.UseSqlServer("data source=.;initial catalog=BitAdminCore;user id=sa;password=sa;");
+                //optionsBuilder.UseSqlServer(SqlHelper.ConnectionString);
+                optionsBuilder.UseSqlServer(SqlHelper.ConnectionString, b => b.UseRowNumberForPaging());
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DemoOne>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnName("createTime")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.CreateUserId).HasColumnName("createUserId");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(64);
+            });
+
             modelBuilder.Entity<FlowBills>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
@@ -267,6 +288,8 @@ namespace BitAdminCore.Models
 
                 entity.Property(e => e.RequiredText).HasMaxLength(64);
 
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
+
                 entity.Property(e => e.UserPicker).HasMaxLength(64);
             });
 
@@ -317,11 +340,15 @@ namespace BitAdminCore.Models
 
                 entity.Property(e => e.Member).HasMaxLength(64);
 
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+
                 entity.Property(e => e.Description).HasMaxLength(2048);
 
                 entity.Property(e => e.MemberName)
                     .IsRequired()
                     .HasMaxLength(64);
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<SysLeader>(entity =>
@@ -360,7 +387,7 @@ namespace BitAdminCore.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserAgent)
-                    .HasMaxLength(128)
+                    .HasMaxLength(512)
                     .IsUnicode(false);
 
                 entity.Property(e => e.UserCode)
@@ -378,16 +405,22 @@ namespace BitAdminCore.Models
 
                 entity.Property(e => e.ModuleId).ValueGeneratedNever();
 
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+
                 entity.Property(e => e.Description).HasMaxLength(2048);
 
                 entity.Property(e => e.ModuleIcon).HasMaxLength(512);
 
                 entity.Property(e => e.ModuleName).HasMaxLength(64);
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<SysModulePage>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
+
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.Description).HasMaxLength(2048);
 
@@ -402,19 +435,21 @@ namespace BitAdminCore.Models
                     .HasMaxLength(64);
 
                 entity.Property(e => e.PageUrl).HasMaxLength(512);
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<SysOperation>(entity =>
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
-                entity.Property(e => e.CreateBy).HasMaxLength(64);
-
                 entity.Property(e => e.CreateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.OperationName).HasMaxLength(64);
 
                 entity.Property(e => e.OperationSign).HasMaxLength(64);
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<SysPageOperation>(entity =>
@@ -432,7 +467,11 @@ namespace BitAdminCore.Models
             {
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
+                entity.Property(e => e.CreateTime).HasColumnType("datetime");
+
                 entity.Property(e => e.RoleName).HasMaxLength(64);
+
+                entity.Property(e => e.UpdateTime).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<SysRoleOperatePower>(entity =>
@@ -503,6 +542,8 @@ namespace BitAdminCore.Models
                 entity.Property(e => e.UpdateTime).HasColumnType("datetime");
 
                 entity.Property(e => e.UserCode).HasMaxLength(32);
+
+                entity.Property(e => e.UserImage).HasMaxLength(128);
 
                 entity.Property(e => e.UserName).HasMaxLength(32);
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BitAdminCore.Models
@@ -38,6 +38,9 @@ namespace BitAdminCore.Models
         public string LinkageSelectD { get; set; }
         public string LinkageSelectE { get; set; }
         public string LinkageSelectF { get; set; }
+        public Guid? CreateBy { get; set; }
         public DateTime? CreateTime { get; set; }
+        public Guid? UpdateBy { get; set; }
+        public DateTime? UpdateTime { get; set; }
     }
 }

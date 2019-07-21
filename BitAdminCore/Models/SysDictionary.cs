@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace BitAdminCore.Models
@@ -10,5 +10,9 @@ namespace BitAdminCore.Models
         public string MemberName { get; set; }
         public string Description { get; set; }
         public int? OrderNo { get; set; }
+        public Guid? CreateBy { get; set; }
+        public DateTime? CreateTime { get; set; }
+        public Guid? UpdateBy { get; set; }
+        public DateTime? UpdateTime { get; set; }
     }
 }

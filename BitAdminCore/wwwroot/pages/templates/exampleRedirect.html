@@ -1,0 +1,70 @@
+﻿<!--BitAdmin2.0框架文件-->
+<div class="box">
+    <div id="exampleQuery" class="box-body querySuite-wrapper">
+        <!-- 条件搜索 -->
+        <div class="querySuite-filter">
+            <table>
+                <tr>
+                    <th>示例名称:</th>
+                    <td><input type="text" name="exampleName" class="form-control" placeholder="示例名称"></td>
+
+                </tr>
+            </table>
+        </div>
+        <!-- 按钮 查询 导入 -->
+        <div class="querySuite-button">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" action="query">
+                    <i class="fas fa-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default" action="add" id="add">
+                    <i class="fas fa-plus"></i> 添加
+                </button>
+                <button type="button" class="btn btn-default" action="delete">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+            </div>
+        </div>
+        <!-- 列表-->
+        <div class="querySuite-table" data-order-by="exampleName" data-order-type="asc"
+             data-key="exampleId"
+             data-query-url="../../Example/QueryExample"
+             data-delete-url="../../Example/DeleteExample"
+             data-add-url="exampleRedirectEdit">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30px;"><input type="checkbox" /></th>
+                        <th data-field="exampleName">示例名称</th>
+                        <th data-field="exampleText">普通文本</th>
+                        <th data-field="examplePhone" data-format="cut|6">电话号码</th>
+                        <th data-field="exampleTime" data-format="time|yyyy-MM-dd HH:mm:ss">日期时间</th>
+                        <th data-field="option">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- 分页 -->
+        <div class="querySuite-paging" data-page-size="10"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        //查询套件初始化
+        var querySuite = $("#exampleQuery").querySuite()
+            .columns["option"].format(function (event,val, data) {
+                var span = $('<span class="btn btn-link">修改</span>');
+                span.bind('click', function () {
+                    //goPage("/Templates/ExampleRedirectEdit", { exampleId: data.exampleId }, "ExampleRedirect");
+                    goPage("/Templates/ExampleRedirectEdit", { exampleId: data.exampleId });
+                });
+                $(this).append(span);
+            })
+            .query();
+
+        $("#add").click(function () {
+            goPage("/Templates/ExampleRedirectEdit", { exampleId: '' }, "ExampleRedirect");
+        });
+    });
+</script>

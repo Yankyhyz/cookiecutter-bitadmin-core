@@ -1,0 +1,82 @@
+﻿<!--BitAdmin2.0框架文件-->
+<div class="box">
+    <div id="exampleQuery" class="box-body querySuite-wrapper">
+        <!-- 条件搜索 -->
+        <div class="querySuite-filter">
+            <table>
+                <tr>
+                    <th>示例名称(like):</th>
+                    <td><input type="text" name="exampleName" class="form-control" placeholder="示例名称(like)"></td>
+                    <th>普通文本(=)：</th>
+                    <td><input type="text" name="plainText" class="form-control" placeholder="普通文本(=)"></td>
+                    <th>日期时间：</th>
+                    <td>
+                        <div data-control="datePicker" data-format="yyyy-MM-dd HH:mm:ss">
+                            <input type="text" name="dateTimePicker" class="form-control" placeholder="日期时间" />
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- 按钮 查询 导入 -->
+        <div class="querySuite-button">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" action="query">
+                    <i class="fas fa-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default" action="add" action-modal="formSuiteModal">
+                    <i class="fas fa-plus"></i> 添加
+                </button>
+                <button type="button" class="btn btn-default" action="delete">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+            </div>
+        </div>
+        <!-- 列表-->
+        <div class="querySuite-table" data-order-by="exampleName" data-order-type="asc"
+             data-key="exampleId"
+             data-query-url="../../WorkFlowTemp/QueryCompleteExample"
+             data-delete-url="../../WorkFlowTemp/DeleteCompleteExample"
+             data-add-url="exampleEdit">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 30px;"><input type="checkbox" /></th>
+                        <th data-field="exampleName">示例名称</th>
+                        <th data-field="plainText">普通文本</th>
+                        <th data-field="mobileText">电话号码</th>
+                        <th data-field="dateTimePicker" data-format="time|yyyy-MM-dd HH:mm:ss">日期时间</th>
+                        <th data-field="userName">用户</th>
+                        <th data-field="option">操作</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- 分页 -->
+        <div class="querySuite-paging" data-page-size="10"></div>
+    </div>
+</div>
+
+<script src="../../js/framework/bitadmin-workflow.js"></script>
+<script src="../../js/lib/jquery.fileupload.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        //查询套件初始化
+        var querySuite = $("#exampleQuery").querySuite()
+            .columns["option"].format(function (event, val, data) {
+                $(this).append($('<span class="btn btn-link">修改</span>')
+                    .bind('click', function () {
+                        goPage("/WorkflowExample/ExampleEdit", { exampleId: data.exampleId }, "WorkflowExample");
+                    }));
+            })
+            .import(function (result) {
+                console.log(result);
+            })
+            .query();
+
+        $("#workflowAdd").click(function () {
+            goPage("/WorkflowExample/ExampleEdit", { exampleId: '' }, "WorkflowExample");
+        });
+    });
+</script>

@@ -1,0 +1,83 @@
+﻿<div class="box">
+    <div id="querySuite" class="box-body querySuite-wrapper">
+        <!-- 条件搜索 -->
+        <div class="querySuite-filter">
+            <table>
+                <tr>
+                    {filter}
+                </tr>
+            </table>
+        </div>
+        <!-- 按钮 查询 导入 -->
+        <div class="querySuite-button">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" action="query">
+                    <i class="fas fa-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default" action="add" action-modal="formSuiteOne">
+                    <i class="fas fa-plus"></i> 添加
+                </button>
+                <button type="button" class="btn btn-default" action="delete">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+            </div>
+        </div>
+        <!-- 列表-->
+        <div class="querySuite-table"
+             data-key="{key}"
+             data-query-url="../../system/Query{name}"
+             data-delete-url="../../system/Delete{name}">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30px;"><input type="checkbox" /></th>
+                        {table}
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- 分页 -->
+        <div class="querySuite-paging" data-page-size="10"></div>
+    </div>
+</div>
+<!-- 模态框（Modal）编辑数据字典信息 -->
+<div id="formSuiteOne" class="modal fade formSuite-wrapper" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form data-title="{title}"
+                      data-save-url="../../system/Save{name}"
+                      data-load-url="../../system/Load{name}">
+                    <table>
+                        {form}
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" action="save">
+                    <i class="fas fa-vote-yea"></i> 保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+    $(function () {
+        //查询套件初始化
+        var querySuite = $("#querySuite").querySuite().query();
+
+        //表单套件初始化
+        var formSuite = $("#formSuiteOne").formSuite()
+            .add(function () {
+            })
+            .edit(function () {
+            })
+            .submit(function () {
+                querySuite.query();
+            });
+    });
+
+</script>

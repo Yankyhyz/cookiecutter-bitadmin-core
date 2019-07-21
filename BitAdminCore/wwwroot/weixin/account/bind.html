@@ -1,0 +1,92 @@
+﻿<!--BitAdmin2.0框架文件-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>绑定账号</title>
+    <meta name="description" content="BitAdminCore, Version 1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!--基础引用-->
+    <link href="../../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <!--框架引用-->
+    <link href="../../lib/admin-lte/css/AdminLTE.min.css" rel="stylesheet" />
+    <link href="../../lib/admin-lte/css/skins/_all-skins.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../../css/framework/BitAdmin.css" />
+    <style type="text/css">
+        .login-box-body, .form-control {
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+            <h3 class="login-box-msg">绑定账号</h3>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                </div>
+                <input type="text" id="txtUserCode" class="form-control" placeholder="帐号/手机/邮箱" value="admin">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                </div>
+                <input type="password" id="txtPassword" class="form-control" placeholder="密码" value="123456">
+            </div>
+            <div class="form-group">
+                <span id="spanmsg" style="color:red;"></span>
+            </div>
+
+            <div class="form-group">
+                <button type="button" id="btnLogin" class="btn btn-primary btn-block ">登录</button>
+            </div>
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    <!--基础引用-->
+    <script src="../../lib/jquery/jquery.min.js"></script>
+    <script src="../../lib/bootstrap/js/bootstrap.min.js"></script>
+    <!--组件引用-->
+    <script src="../../lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../../lib/jquery-form/jquery.form.min.js"></script>
+    <!--框架引用-->
+    <script type="text/javascript" src="../../js/framework/BitAdmin.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnLogin").click(function () {
+                var account = $("#txtUserCode").val();
+                if (account == "") {
+                    $("#spanmsg").text("请输入帐号/手机/邮箱");
+                    return;
+                }
+                var password = $("#txtPassword").val();
+                if (password == "") {
+                    $("#spanmsg").text("请输入登录密码");
+                    return;
+                }
+                var openId = url.query("openid");
+                $.showLoading();
+                $.ajax({
+                    url: "../../auth/binduser",
+                    data: { account: account, password: password, openId: openId },
+                    datatype: "json",
+                    type: "post",
+                    success: function (result) {
+                        if (result.code == 0) {
+                            window.location.href = "../../weixin/home/index.html";
+                        } else {
+                            $("#spanmsg").text(result.msg);
+                            $("#txtPassword").val('');
+                        }
+                        $.hideLoading();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

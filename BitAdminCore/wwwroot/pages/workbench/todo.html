@@ -1,0 +1,75 @@
+﻿<!--BitAdmin2.0框架文件-->
+<div class="box">
+    <div id="exampleQuery" class="box-body querySuite-wrapper">
+        <!-- 条件搜索 -->
+        <div class="querySuite-filter">
+            <table>
+                <tr>
+                    <th>工单名称：</th>
+                    <td>
+                        <input type="hidden" name="state" value="ToDo" />
+                        <input type="text" name="workOrderName" class="form-control">
+                    </td>
+                    <th>待办开始时间：</th>
+                    <td>
+                        <input type="text" name="startDate" class="form-control" data-picker="datetime" data-format="yyyy-MM-dd" placeholder="开始时间" />
+                    </td>
+                    <th>至</th>
+                    <td>
+                        <input type="text" name="endDate" class="form-control" data-picker="datetime" data-format="yyyy-MM-dd" placeholder="结束时间" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- 按钮 查询 导入 -->
+        <div class="querySuite-button">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" action="query">
+                    <i class="fas fa-search"></i> 查询
+                </button>
+            </div>
+        </div>
+        <!-- 列表-->
+        <div class="querySuite-table"
+             data-key="taskUserId"
+             data-query-url="../../Workflow/GetWorkbenchList">
+            <table>
+                <thead>
+                    <tr>
+                        <th data-field="name">流程类型</th>
+                        <th data-field="workOrderName">工单名称</th>
+                        <th data-field="stepName">处理环节</th>
+                        <th data-field="userName">当前处理人</th>
+                        <th data-field="startTime" data-format="time|yyyy-MM-dd HH:mm:ss" style="width:200px;">待办开始时间</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- 分页 -->
+        <div class="querySuite-paging" data-page-size="10"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        //查询套件初始化
+        var querySuite = $("#exampleQuery").querySuite()
+            .columns["workOrderName"].format(function (event, val, data) {
+                var span = $('<span class="btn btn-link">' + (val || '') + '</span>');
+                span.bind('click', function () {
+                    switch (data.mainCode) {
+                        case "999":
+                            goPage("/WorkflowExample/ExampleTab", { orderId: data.billsCode, state: $('.querySuite-filter [name=state]').val(), taskUserId: data.taskUserId }, "WorkflowExample");
+                            break;
+                        case '':
+                            break;
+                    }
+                });
+                $(this).append(span);
+            })
+            .columns["userName"].format(function (event, val, data) {
+                $(this).html(data.userName + "(" + data.userCode + ")");
+            })
+            .query();
+    });
+</script>

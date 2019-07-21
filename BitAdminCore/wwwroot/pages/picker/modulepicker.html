@@ -1,0 +1,42 @@
+﻿<!--BitAdmin2.0框架文件-->
+<style type="text/css">
+    .modal .modal-body {
+        padding: 0;
+    }
+</style>
+<link href="../../lib/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet" />
+
+<div class="modal fade" id="pickerModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">模块选择</h4>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <div id="moduleTree" data-url="../../picker/getModuleTreeData" data-text="moduleName" style="height:300px; overflow-y:auto"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script src="../../lib/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+<script type="text/javascript">
+    var modal = $("#pickerModal").pickerModal();
+
+    $("#pickerModal #moduleTree").bitTree({
+        onNodeSelected: function (event, node) {
+            $(modal.value).val(node.moduleId);
+            $(modal.text).val(node.moduleName);
+            $(modal.text).change();
+            $("#pickerModal").modal('hide');
+        }
+    }).load();
+</script>

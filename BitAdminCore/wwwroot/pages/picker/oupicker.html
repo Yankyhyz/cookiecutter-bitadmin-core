@@ -1,0 +1,110 @@
+﻿<!--BitAdmin2.0框架文件-->
+<link href="../../lib/bootstrap-treeview/bootstrap-treeview.min.css" rel="stylesheet" />
+<style type="text/css">
+    .modal .card-body {
+        padding: 0;
+    }
+</style>
+
+<div class="modal fade" id="OUSelection">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>组织架构选择</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                组织架构
+                            </div>
+                            <div class="card-body">
+                                <div id="OUSelectionTree" data-url="../../picker/GetDepData" data-text="departmentName" style="height:300px; overflow-y:auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                已选组织
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group" id="OUSelectionSelect" style="height: 300px; overflow-y: auto;width:100%; margin-bottom:0px;"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" action="save">
+                    <i class="fas fa-vote-yea"></i> 确定
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script src="../../js/lib/multiselect.min.js"></script>
+<script src="../../lib/bootstrap-treeview/bootstrap-treeview.min.js"></script>
+<script type="text/javascript">
+
+    var modal = $("#OUSelection").pickerModal()
+        .save(function () {
+            var val = "";
+            var text = "";
+            $.each($("#OUSelectionSelect").find('li'), function (i, d) {
+                if (val != "") {
+                    val += ",";
+                    text += ",";
+                }
+                text += $(this).attr("text");
+                val += $(this).attr("dataid");
+            });
+            return { text: text, value: val };
+        });
+    
+    //加载部门
+    $("#OUSelection #OUSelectionTree").bitTree()
+        .select(function (event, node) {
+            var bool = true;
+            if (modal.single && modal.single == "true")
+                $("#OUSelection #OUSelectionSelect").children("li").remove();
+            $.each($("#OUSelectionSelect").find('li'), function (i, d) {
+                if ($(this).attr("dataid") == node.id && bool == true)
+                    bool = false;
+            });
+            if (bool == true) {
+                var li = $('<li class="list-group-item" dataid="' + node.departmentId + '" text="' + node.departmentName + '"><span class="glyphicon glyphicon-remove-circle" style="cursor:pointer;color:red;padding-right: 5px"></span>' + node.departmentFullName + ' </li>');
+                li.find("span").bind("click", function () {
+                    $(this).parent().remove();
+                });
+                $("#OUSelection #OUSelectionSelect").append(li);
+            }
+        }).load();
+
+    //加载已选的部门
+    $.ajax({
+        url: '../../picker/GetSelectDepData',
+        type: 'post',
+        cache: false,
+        async: true,
+        data: { DepID: $(modal.value).val() },
+        success: function (result) {
+            if (result.code == 0) {
+                $.each(result.data, function (i, d) {
+                    var li = $('<li class="list-group-item" dataid="' + d.departmentId + '" text="' + d.departmentName + '"><span class="glyphicon glyphicon-remove-circle" style="cursor:pointer;color:red;padding-right: 5px"></span>' + d.departmentFullName + ' </li>');
+                    li.find("span").bind("click", function () {
+                        $(this).parent().remove();
+                    });
+                    $("#OUSelection #OUSelectionSelect").append(li);
+                });
+            }
+        }
+    });
+</script>

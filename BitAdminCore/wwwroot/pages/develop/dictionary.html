@@ -1,0 +1,185 @@
+﻿<!--BitAdmin2.0框架文件-->
+<div class="box">
+    <div class="box-body querySuite-wrapper">
+        <!-- 条件搜索 -->
+        <div class="querySuite-filter">
+            <table>
+                <tr>
+                    <th>字典分类:</th>
+                    <td><input type="text" name="type" class="form-control"></td>
+                    <th>字典成员：</th>
+                    <td><input type="text" name="member" class="form-control"></td>
+                    <th>成员名称：</th>
+                    <td><input type="text" name="memberName" class="form-control"></td>
+                </tr>
+            </table>
+        </div>
+        <!-- 按钮 查询 导入 -->
+        <div class="querySuite-button">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" action="query">
+                    <i class="fas fa-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default" action="add" action-modal="formSuiteOne">
+                    <i class="fas fa-plus"></i> 添加
+                </button>
+                <button type="button" class="btn btn-default" id="buildSql">
+                    <i class="fas fa-file-export"></i> 生成脚本
+                </button>
+                <button type="button" class="btn btn-default" action="delete">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+            </div>
+        </div>
+        <!-- 列表-->
+        <div class="querySuite-table" data-sort-name="OrderNo" data-sort-order="desc"
+             data-key="type,member"
+             data-query-url="../../develop/QueryDictionary"
+             data-delete-url="../../develop/DeleteDictionary">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30px;"><input type="checkbox" /></th>
+                        <th data-field="type" data-format="edit">字典分类</th>
+                        <th data-field="member">字典成员</th>
+                        <th data-field="memberName">成员名称</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- 分页 -->
+        <div class="querySuite-paging" data-page-size="10"></div>
+    </div>
+</div>
+<!-- 模态框（Modal）编辑数据字典信息 -->
+<div id="formSuiteOne" class="modal fade formSuite-wrapper">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form data-title="数据字典"
+                      data-save-url="../../develop/SaveDictionary"
+                      data-load-url="../../develop/LoadDictionary">
+                    <table>
+                        <tr>
+                            <th>字典分类：</th>
+                            <td>
+                                <input name="type" id="Type" class="form-control required" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>字典成员：</th>
+                            <td>
+                                <input type="text" id="Member" name="member" class="form-control required">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>成员名称：</th>
+                            <td>
+                                <input type="text" name="memberName" class="form-control required">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>描述：</th>
+                            <td>
+                                <input type="text" name="describe" class="form-control">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>排序：</th>
+                            <td>
+                                <input type="text" name="orderNo" class="form-control required number">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" action="save">
+                    <i class="fas fa-vote-yea"></i> 保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div id="modelSql" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>导出脚本</h5>
+            </div>
+            <div class="modal-body">
+                <span id="sqlscript"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="copyText()">
+                    <i class="fas fa-vote-yea"></i> 复制
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script type="text/javascript">
+    $(function () {
+        //查询套件初始化
+        var querySuite = $(".querySuite-wrapper").querySuite().query();
+
+        //表单套件初始化
+        var formSuite = $("#formSuiteOne").formSuite()
+            .add(function () {//点击添加：初始化表单后
+                $('#Type').attr('readonly', false);
+                $('#Member').attr('readonly', false);
+            })
+            .edit(function () {//点击编辑：加载数据后
+                $('#Type').attr('readonly', true);
+                $('#Member').attr('readonly', true);
+            })
+            .submit(function () {//点击保存：数据保存成功后
+                querySuite.query();
+            });
+
+        $("#buildSql").click(function () {
+            var str = "";
+            $.ajax({
+                url: "../../Develop/QueryDictionary",
+                type: "Post",
+                async: false,
+                data: {
+                    Type: $(".querySuite-filter input[name=type]").val(),
+                    Member: $(".querySuite-filter input[name=member]").val(),
+                    MemberName: $(".querySuite-filter input[name=memberName]").val(),
+                },
+                success: function (result) {
+                    if (result.data.length > 0) {
+                        result.data.forEach(function (d, i) {
+                            str = str + "<p>" + string.format("insert into SysDictionary values('{0}','{1}','{2}','{3}',{4})", d.type, d.member, d.memberName, d.description, d.orderNo) + "</p>";
+                        });
+                        $("#sqlscript").html(str);
+                        $("#modelSql").modal('show')
+                    } else {
+                        alert("当前没有数据")
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    mui.toast("网络异常，请检查网络设置！");
+                }
+            });
+        });
+    });
+
+    function copyText() {
+        var Url2 = $("#sqlscript").text();
+        var oInput = document.createElement('input');
+        oInput.value = Url2;
+        document.body.appendChild(oInput);
+        oInput.select(); // 选择对象
+        document.execCommand("Copy"); // 执行浏览器复制命令
+        oInput.className = 'oInput';
+        oInput.style.display = 'none';
+        alert('复制成功');
+    }
+</script>

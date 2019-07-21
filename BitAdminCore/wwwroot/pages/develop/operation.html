@@ -1,0 +1,97 @@
+﻿<!--BitAdmin2.0框架文件-->
+<div class="box">
+    <div class="box-body querySuite-wrapper">
+        <!-- 按钮 查询 导入 -->
+        <div class="querySuite-button">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" action="query">
+                    <i class="fas fa-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default" action="add" action-modal="formSuiteOne">
+                    <i class="fas fa-plus"></i> 添加
+                </button>
+                <button type="button" class="btn btn-default" action="delete">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+            </div>
+        </div>
+        <!-- 列表-->
+        <div class="querySuite-table" data-sort-name="logTime" data-sort-order="desc"
+             data-key="id"
+             data-query-url="../../develop/QueryOperationData"
+             data-delete-url="../../develop/DeleteOperationData"
+             data-sort-url="../../develop/SortOperationData">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30px;"><input type="checkbox" /></th>
+                        <th data-field="operationSign" data-format="edit">标识</th>
+                        <th data-field="operationName">名称</th>
+                        <th data-field="orderNo">排序</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- 分页 -->
+        <div class="querySuite-paging"></div>
+    </div>
+</div>
+<!-- 模态框（Modal）编辑数据字典信息 -->
+<div id="formSuiteOne" class="modal fade formSuite-wrapper" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form data-title="页面操作"
+                      data-save-url="../../develop/SaveOperationData"
+                      data-load-url="../../develop/LoadOperationData">
+                    <table>
+                        <tr>
+                            <th>标识：</th>
+                            <td>
+                                <input type="hidden" name="id" />
+                                <input type="text" name="operationSign" required class="form-control" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>名称：</th>
+                            <td>
+                                <input type="text" name="operationName" required class="form-control" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSave" action="save">
+                    <i class="fas fa-vote-yea"></i> 保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        //查询套件初始化
+        var querySuite = $(".querySuite-wrapper").querySuite().sortable(function (ids) { querySuite.query(); }).query();
+
+        //表单套件初始化
+        var formSuite = $("#formSuiteOne").formSuite()
+            .add(function () {//点击添加：初始化表单后
+                $('#Type').attr('readonly', false);
+                $('#Member').attr('readonly', false);
+            })
+            .edit(function () {//点击编辑：加载数据后
+                $('#Type').attr('readonly', true);
+                $('#Member').attr('readonly', true);
+            })
+            .submit(function () {//点击保存：数据保存成功后
+                querySuite.query();
+            });
+    });
+
+
+</script>

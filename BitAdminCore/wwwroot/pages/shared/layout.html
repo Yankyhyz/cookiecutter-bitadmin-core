@@ -1,0 +1,83 @@
+﻿<!--BitAdmin2.0框架文件-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>首页</title>
+    <meta name="description" content="BitAdmin, Version 1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <!--[if lt IE 8]>
+    <script>alert("Incompatible web browser.");</script>
+    <![endif]-->
+    <!--基础引用-->
+    <link href="../../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../lib/font-awesome/css/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="../../lib/jquery-ui/themes/start/jquery-ui.min.css" rel="stylesheet" />
+    <!--组件引用-->
+    <link href="../../lib/admin-lte/css/AdminLTE.min.css" rel="stylesheet" />
+    <link href="../../lib/admin-lte/css/skins/_all-skins.min.css" rel="stylesheet" />
+    <!--框架引用-->
+    <link rel="stylesheet" href="../../css/framework/bitadmin.css" />
+    <link rel="stylesheet" href="../../css/framework/adminSuite.css" />
+    <!--常用控件-->
+    <link href="../../css/lib/jedate.css" rel="stylesheet" />
+
+    <style>
+        .fixed .content-wrapper, .fixed .right-side {
+            padding-top: 0px;
+        }
+
+        .content-wrapper, .main-footer {
+            margin-left: 0px;
+        }
+    </style>
+
+    <!--基础引用-->
+    <script src="../../lib/jquery/jquery.min.js"></script>
+    <script src="../../js/lib/popper.min.js"></script>
+    <script src="../../lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+    <!--组件引用-->
+    <script src="../../lib/jquery-validation/jquery.validate.min.js"></script>
+    <script src="../../lib/jquery-form/jquery.form.min.js"></script>
+    <script src="../../lib/admin-lte/js/adminlte.min.js"></script>
+    <!--常用控件-->
+    <script src="../../js/lib/jquery.jedate.js"></script>
+    <!-- 框架引用 -->
+    <script type="text/javascript" src="../../js/framework/bitadmin.js"></script>
+    <script type="text/javascript" src="../../js/framework/adminSuite-tools.js"></script>
+    <script type="text/javascript" src="../../js/framework/adminSuite.js"></script>
+
+    <script type="text/javascript">
+        BitAdmin.IsLogin(function () {
+            bitPage.loadContent();
+        });
+
+        $.adminSetup({
+            addLogs: function (title, type, msg) { BitAdmin.AddLogs(title, type, msg); }
+        });
+    </script>
+</head>
+<body class="hold-transition skin-blue">
+    <div class="wrapper">
+        <div class="content-wrapper">
+            <section class="content-header">
+                <h1>
+                    <span class="header-pageName-title"></span>
+                    <small class="header-PageDesc"></small>
+                </h1>
+                <ol class="breadcrumb">
+                    <li><a href="javascript:void(0);"><i class="fa fa-dashboard"></i> 主页 </a></li>
+                    <li><a href="javascript:void(0);" class="header-moduleName">模块</a></li>
+                    <li class="active header-pageName">页面</li>
+                </ol>
+            </section>
+            <section class="content"></section>
+            <!--cnzz统计代码，可以移除，开始-->
+            <script>var _hmt = _hmt || []; (function () { var hm = document.createElement("script"); hm.src = "https://hm.baidu.com/hm.js?67d9c965e616fb773b85f279d372b0c4"; var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(hm, s); })();</script>
+            <!--cnzz统计代码，可以移除，结束-->
+        </div>
+    </div>
+</body>
+</html>

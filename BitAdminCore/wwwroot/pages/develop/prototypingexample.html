@@ -1,0 +1,127 @@
+﻿<!--BitAdmin2.0框架文件-->
+<div class="box">
+    <div id="querySuiteOne" class="box-body querySuite-wrapper">
+        <!-- 条件搜索 -->
+        <div class="querySuite-filter">
+            <table>
+                <tr>
+                    <th>列一:</th>
+                    <td><input type="text" name="c1" class="form-control" /></td>
+                    <th>列一:</th>
+                    <td><input type="text" name="c2" class="form-control" /></td>
+                    <th>列一:</th>
+                    <td><input type="text" name="c3" class="form-control" /></td>
+                </tr>
+            </table>
+        </div>
+        <!-- 按钮 查询 添加 删除 等 -->
+        <div class="querySuite-button">
+            <div class="btn-group">
+                <button type="button" class="btn btn-default" action="query">
+                    <i class="fas fa-search"></i> 查询
+                </button>
+                <button type="button" class="btn btn-default" action="add" action-modal="formSuiteOne">
+                    <i class="fas fa-plus"></i> 添加
+                </button>
+                <button type="button" class="btn btn-default" action="delete">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+            </div>
+        </div>
+        <!-- 列表 操作 -->
+        <div class="querySuite-table"
+             data-key="module,page,key"
+             data-query-url="../../prototyping/query"
+             data-delete-url="../../prototyping/delete">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:30px;"><input type="checkbox" /></th>
+                        <th data-field="c1" data-format="edit">列一</th>
+                        <th data-field="c2">列二</th>
+                        <th data-field="c3">列三</th>
+                        <th data-field="c4">列四</th>
+                        <th data-field="c5">列五</th>
+                        <th data-field="c6">列六</th>
+                        <th data-field="c7">列七</th>
+                        <th data-field="c8">列八</th>
+                        <th data-field="c9">列九</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- 分页 默认10行-->
+        <div class="querySuite-paging"></div>
+    </div>
+</div>
+<!-- 模态框（Modal）编辑数据字典信息 -->
+<div id="formSuiteOne" class="modal fade formSuite-wrapper" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form data-title=""
+                      data-save-url="../../prototyping/save"
+                      data-load-url="../../prototyping/load">
+                    <table>
+                        <tr>
+                            <th>列一：</th>
+                            <td><input type="text" name="c1" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列二：</th>
+                            <td><input type="text" name="c2" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列三：</th>
+                            <td><input type="text" name="c3" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列四：</th>
+                            <td><input type="text" name="c4" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列五：</th>
+                            <td><input type="text" name="c5" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列六：</th>
+                            <td><input type="text" name="c6" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列七：</th>
+                            <td><input type="text" name="c7" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列八：</th>
+                            <td><input type="text" name="c8" class="form-control" /></td>
+                        </tr>
+                        <tr>
+                            <th>列九：</th>
+                            <td><input type="text" name="c9" class="form-control" /></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSave" action="save">
+                    <i class="fas fa-vote-yea"></i> 保存
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        var pageUrl = url.query("page").split("?")[0];
+        var pageArr = pageUrl.split('/');
+        $(".querySuite-filter table").first("td")
+            .append('<input type="hidden" name="module" value="' + pageArr[pageArr.length - 2] + '" />')
+            .append('<input type="hidden" name="page" value="' + pageArr[pageArr.length - 1] + '" />');
+        var querySuite = $("#querySuiteOne").querySuite().query();
+        var formSuite = $("#formSuiteOne").formSuite();
+    });
+</script>

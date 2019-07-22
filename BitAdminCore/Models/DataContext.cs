@@ -17,6 +17,7 @@ namespace BitAdminCore.Models
         }
 
         public virtual DbSet<DemoOne> DemoOne { get; set; }
+        public virtual DbSet<DemoTwo> DemoTwo { get; set; }
         public virtual DbSet<FlowBills> FlowBills { get; set; }
         public virtual DbSet<FlowBillsRecord> FlowBillsRecord { get; set; }
         public virtual DbSet<FlowBillsRecordUser> FlowBillsRecordUser { get; set; }
@@ -47,9 +48,6 @@ namespace BitAdminCore.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                // optionsBuilder.UseSqlServer("data source=.;initial catalog=BitAdminCore;user id=sa;password=sa;");
-                //optionsBuilder.UseSqlServer(SqlHelper.ConnectionString);
                 optionsBuilder.UseSqlServer(SqlHelper.ConnectionString, b => b.UseRowNumberForPaging());
             }
         }
@@ -57,6 +55,23 @@ namespace BitAdminCore.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DemoOne>(entity =>
+            {
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CreateTime)
+                    .HasColumnName("createTime")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.CreateUserId).HasColumnName("createUserId");
+
+                entity.Property(e => e.Name)
+                    .HasColumnName("name")
+                    .HasMaxLength(64);
+            });
+
+            modelBuilder.Entity<DemoTwo>(entity =>
             {
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
